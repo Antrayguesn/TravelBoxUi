@@ -11,6 +11,7 @@ const ClusterCard = ({ setEditCluster, location }) => {
   const photos = cluster && Object.values(cluster.photos || {});
   const randomPhoto = photos && photos[Math.floor(Math.random() * photos.length)];
 
+
   React.useEffect(() => {
     const utf8Bytes = new TextEncoder().encode(location);
 
@@ -32,24 +33,16 @@ const ClusterCard = ({ setEditCluster, location }) => {
         console.error("Erreur de récupération des clusters", error);
       });
   }, []);
+  console.log(cluster)
 
   return (
-    cluster && <Card
+    cluster && Object.keys(cluster).length ? <Card
       hoverable
       style={{ width: 500 }}
-      cover={
-        randomPhoto ? (
-          <img style={{paddingBottom: "56.25%", overflow: "hidden", height: "100%"}} src={`api/${randomPhoto.path}`} alt="Photo aléatoire du cluster" />
-        ) : (
-          <div style={{ height: 150, backgroundColor: "#f0f0f0", display: "flex", alignItems: "center", justifyContent: "center" }}>
-            Aucune photo
-          </div>
-        )
-      }
       onClick={() => setEditCluster(cluster.cluster_id)}
     >
       <Meta title={cluster.location} description={cluster.location || "Localisation inconnue"} />
-    </Card>
+    </Card> : undefined
   );
 };
 

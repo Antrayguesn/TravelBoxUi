@@ -17,6 +17,7 @@ const { Header, Footer, Sider, Content } = Layout;
 const contentStyle = {
   minHeight: 120,
   lineHeight: '120px',
+  marginTop: "100px"
 };
 const siderStyle = {
   textAlign: 'center',
