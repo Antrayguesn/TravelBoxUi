@@ -67,7 +67,18 @@ const CarouselPhotoCluster = ({ photos }) => {
               }
               actions={[
                     <EditOutlined key="edit" />,
-                    <PushpinOutlined onClick={() => setShowPhotoLocation(photo)} style={{color: "blue"}} key="location"/>,
+                    <PushpinOutlined
+                      onClick={() => {
+                        if (photo.coord !== null) {
+                          setShowPhotoLocation(photo);
+                        }
+                      }}
+                      style={{
+                        color: photo.coord === null ? "gray" : "blue",
+                        cursor: photo.coord === null ? "not-allowed" : "pointer",
+                      }}
+                      key="location"
+                    />,
                     <DeleteOutlined style={{color:"red"}} key="delete"/>
                   ]}
             />
@@ -83,11 +94,11 @@ const CarouselPhotoCluster = ({ photos }) => {
           centered
           className="fullscreen-modal"
         >
-            <img
-              src={"api/" + selectedPhoto.path}
-              alt="Enlarged"
-              className="modal-image"
-            />
+          <img
+            src={"api/" + selectedPhoto.path}
+            alt="Enlarged"
+            className="modal-image" // Utilise la classe CSS ici
+          />
         </Modal>
       )}
 

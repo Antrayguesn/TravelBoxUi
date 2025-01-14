@@ -84,10 +84,11 @@ iframe {
   display: flex;
   justify-content: space-between;
   align-items: center;
+  height: 100px;
 }
 
 .header img {
-  height: 100px;
+  height: 90px;
   margin-left: 10px;
 }
 
@@ -178,4 +179,14 @@ iframe {
   width: 80%;
 
   overflow: hidden;
+}
+
+.modal-image {
+  width: auto; /* Permet à l'image de s'adapter en largeur */
+  height: auto; /* Permet à l'image de s'adapter en hauteur */
+  max-width: 90vw; /* Ne dépasse pas 90% de la largeur de la fenêtre */
+  max-height: 90vh; /* Ne dépasse pas 90% de la hauteur de la fenêtre */
+  object-fit: contain; /* Conserve les proportions */
+  margin: auto; /* Centre l'image dans le modal */
+  display: block; /* Nécessaire pour le centrage */
 }
