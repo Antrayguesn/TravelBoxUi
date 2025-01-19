@@ -6,7 +6,7 @@ import { Col, Row } from 'antd';
 
 import "./app.css";
 
-const ClusterView = ({cluster, setClusterLocation, updateCluster}) => {
+const ClusterView = ({cluster, setClusterLocation, updateCluster, deletePhoto}) => {
   const [continentCluster, setContinentCluster] = React.useState(cluster.continent)
   const [countryCluster, setCountryCluster] = React.useState(cluster.country)
   const [regionCluster, setRegionCluster] = React.useState(cluster.region)
@@ -40,6 +40,7 @@ const ClusterView = ({cluster, setClusterLocation, updateCluster}) => {
    
 )
 
+
   return (
     <>
     <Row >
@@ -51,6 +52,7 @@ const ClusterView = ({cluster, setClusterLocation, updateCluster}) => {
       <Col span={24} style={{textAlign: "center"}}>
         <CarouselPhotoCluster
           photos={cluster.photos}
+          deletePhoto={deletePhoto}
         />
       </Col>
     </Row>

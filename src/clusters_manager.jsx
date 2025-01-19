@@ -1,9 +1,9 @@
 import React from "react";
-import { Breadcrumb, Button, Card } from "antd";
+import { Breadcrumb, Button, Card, Col, Row } from "antd";
 import "./app.css";
 import ClustersView from "./clusters_view";
 import ClusterView from "./cluster_view";
-import { Space, Switch } from 'antd';
+import { Space, Switch, Statistic} from 'antd';
 import ClustersMap from "./clusters_map";
 
 const API_BASE_URL = "/api";
@@ -15,6 +15,7 @@ const ClustersManager = () => {
   const [clusterLocationToEdit, setClusterLocationToEdit] = React.useState();
   const [clusterEdit, setClusterEdit] = React.useState();
   const [showMap, setShowMap] = React.useState(true);
+  const [stat, setStat] = React.useState(true);
 
   const SWITCH_VALUE = {true: "Map", false: "List"}
 
@@ -65,6 +66,26 @@ const ClustersManager = () => {
       });
   }, [clusterLocationToEdit]);
 
+  React.useEffect(() => {
+    fetch(`${API_BASE_URL}/stat_clusters`)
+      .then((response) => {
+        if (!response.ok) {
+          throw new Error(`HTTP error! Status: ${response.status}`);
+        }
+        return response.json();
+      })
+      .then((data) => {
+        if (data && typeof data === "object") {
+          setStat(data)
+        } else {
+          console.error("Les données reçues ne sont pas valides:", data);
+        }
+      })
+      .catch((error) => {
+        console.error("Erreur de récupération des clusters", error);
+      });
+  }, []);
+
   const updateCluster = (data) => {
     
       const updatedCluster = { 
@@ -99,16 +120,17 @@ const ClustersManager = () => {
 
   };
 
-  // Récupérer les données à afficher pour le niveau actuel
   const getCurrentLevelData = () => {
     if (!mapCluster) return null;
-    let currentLevelData = mapCluster;
-    for (const level of currentPath) {
-      currentLevelData = currentLevelData[level];
-      if (!currentLevelData) break;
-    }
-    return currentLevelData;
+  
+    return currentPath.reduce((currentLevelData, level) => {
+      if (currentLevelData && currentLevelData[level]) {
+        return currentLevelData[level].children || {};
+      }
+      return null;
+    }, mapCluster);
   };
+
 
   const currentLevelData = getCurrentLevelData();
   const handleChangePath = (path) => {
@@ -147,9 +169,38 @@ const ClustersManager = () => {
     return [mondeSpan, ...map];
   };
   
+  const deletePhoto = (photo) => {
+    if (!clusterEdit || !clusterEdit.photos[photo.photo_id]) return;
+  
+    // Optimistic UI update
+    setClusterEdit((prevCluster) => {
+      const { [photo.photo_id]: _, ...updatedPhotos } = prevCluster.photos;
+      return { ...prevCluster, photos: updatedPhotos };
+    });
+  
+    fetch(`${API_BASE_URL}/cluster/${clusterEdit.cluster_id}/${photo.photo_id}`, {
+      method: "DELETE",
+    })
+      .then((response) => {
+        if (!response.ok) {
+          throw new Error(`HTTP error! Status: ${response.status}`);
+        }
+      })
+      .catch((error) => {
+        console.error("Erreur de suppression de la photo :", error);
+        // Revert UI update on error
+        setClusterEdit((prevCluster) => ({
+          ...prevCluster,
+          photos: { ...prevCluster.photos, [photo.photo_id]: photo },
+        }));
+      });
+  };
+
+
 
   return (
     <>
+    <Row style={{margin:10}}>
       {!clusterEdit && 
       <Switch
         checkedChildren={SWITCH_VALUE[true]}
@@ -160,20 +211,28 @@ const ClustersManager = () => {
           setReload(Date.now());
         }}/>
       }
+      </Row>
+      <Row>
+        <Col style={{margin:10}}>
+          <Statistic title="Continent visited" value={stat.nb_continent} />
+        </Col>
+        <Col style={{margin: 10}}>
+          <Statistic title="Country visitied" value={stat.nb_country}/>
+        </Col>
+      </Row>
 
+    <Row style={{margin:10}}>
       {/* Breadcrumb pour afficher le chemin actuel */}
       <Breadcrumb
         separator=">"
         items={generateSpanBreadcrumb()}
       />
+      </Row>
       {!clusterEdit ?  
         showMap ? <ClustersMap setClusterLocation={setClusterLocationToEdit}/> : 
         <ClustersView currentPath={currentPath} currentLevelData={currentLevelData} setCurrentPath={setCurrentPath} onClusterCardClick={setClusterLocationToEdit}/>
-        : <ClusterView cluster={clusterEdit} setClusterLocation={setClusterLocationToEdit} updateCluster={updateCluster}/>
-      
+        : <ClusterView cluster={clusterEdit} setClusterLocation={setClusterLocationToEdit}  deletePhoto={deletePhoto} updateCluster={updateCluster}/>
     }
-
-      
     </>
   );
 };

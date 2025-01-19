@@ -86,6 +86,18 @@ iframe {
   align-items: center;
   height: 100px;
 }
+/* Styles pour le header */
+.footer {
+  top: 0;
+  width: 100%;
+  padding: 10px 20px;
+  align-items: center;
+  height: 100%;
+}
+.footer img {
+  height: 90px;
+  margin-left: 10px;
+}
 
 .header img {
   height: 90px;

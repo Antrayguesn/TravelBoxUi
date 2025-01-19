@@ -2,7 +2,7 @@ import React from "react";
 
 import { createRoot } from 'react-dom/client';
 import React from 'react';
-import { Button, Input, Layout } from 'antd';
+import { Button, Input, Layout, Row } from 'antd';
 
 import ClustersManager from "./clusters_manager"
 
@@ -10,6 +10,7 @@ import ClustersManager from "./clusters_manager"
 import { Layout } from 'antd';
 
 import logo from "./assets/logo-AIGYRE_icon-blue.png"
+import logo_footer from "./assets/logo-AIGYRE_150.png"
 
 import "./app.css";
 
@@ -52,7 +53,8 @@ const App = () =>  {
           <Content style={contentStyle}>
               <ClustersManager/>
           </Content>
-          <Footer style={footerStyle}>Footer</Footer>
+          <Footer style={footerStyle}>
+          </Footer>
         </Layout>
   );
 }

@@ -3,7 +3,7 @@ import { Card, Carousel, Modal } from "antd";
 import { DeleteOutlined, EditOutlined, PushpinOutlined } from "@ant-design/icons";
 import "./app.css";
 
-const CarouselPhotoCluster = ({ photos }) => {
+const CarouselPhotoCluster = ({ photos, deletePhoto }) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedPhoto, setSelectedPhoto] = useState(null);
   const [showPhotoLocation, setShowPhotoLocation] = useState(null);
@@ -79,7 +79,11 @@ const CarouselPhotoCluster = ({ photos }) => {
                       }}
                       key="location"
                     />,
-                    <DeleteOutlined style={{color:"red"}} key="delete"/>
+                    <DeleteOutlined
+                      style={{color:"red"}}
+                      key="delete"
+                      onClick={() => deletePhoto(photo)}
+                      />
                   ]}
             />
           </div>

@@ -78,7 +78,7 @@ const ClustersMap = ({setClusterLocation}) => {
                     <EditOutlined key={"edit-" + point} onClick={() => handleMarkerClick(point)}/>,
                 ]}>
                     <Card.Meta
-                      title={point.name}
+                      title={point.name.split("/").at(-1)}
                       style={{textWrap: "wrap"}}
                     />
             </Card>
