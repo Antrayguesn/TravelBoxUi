@@ -1,10 +1,12 @@
-TravelBox UI is a photo gallery interface designed to work seamlessly with the [https://github.com/Antrayguesn/TravelBoxApi](TravelBox API). It allows you to visualize your photos as an interactive map or as a list.
+TravelBox UI is a photo gallery interface designed to work seamlessly with the [TravelBox API](https://github.com/Antrayguesn/TravelBoxApi). It allows you to visualize your photos as an interactive map or as a list.
 
 This project is built using:
 
 * React.js for the front-end framework.
 * Ant Design for UI components.
 * Parcel as the build tool for bundling assets.
+
+The TravelBoxApi should be callable under /api url. (http://localhost/api)
 
 ---
 
